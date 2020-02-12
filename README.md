@@ -1,68 +1,74 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# tesseract-with-html5-camera
 
-## Available Scripts
+The objective of this package is to recongnize text from captured image from mobile camera or webcam.
+This package also have same look and feel of a native mobile camera app but with a react component.
 
-In the project directory, you can run:
+## Requirement
+- react: >=16.8.0
+- react-dom: >=16.8.0
 
-### `yarn start`
+## Demo link
+- http://PayalBhalerao.github.io/tesseract-with-html5-camera-demo
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Required Working Environment for getUserMedia()
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+- **https or localhost** : The `getUserMedia()` method is only available in secure contexts `(https or localhost)`. If a document isn't loaded in a secure context, the navigator.mediaDevices property is undefined, making access to getUserMedia() impossible. Attempting to access `getUserMedia()` in this situation will result in a TypeError. See [developer.mozilla.org](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia#Privacy_and_security)
 
-### `yarn test`
+- **iOS >= 11 WebRTC issue with webkit (Chrome & Firefox)** : Apple restricts WebRTC to **Safari only** so it mean that you can't use the `getUserMedia()` with Firefox and Chrome. So `getUserMedia()` is not supported yet, for "security reasons". See [Stackoverflow](https://stackoverflow.com/questions/45055329/does-webkit-in-ios-11-beta-support-webrtc)
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `yarn build`
+## Installation
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm install --save tesseract-with-html5-camera
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+```bash
+yarn add tesseract-with-html5-camera
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Both Yarn and npm download packages from the npm registry.
 
-### `yarn eject`
+## Getting started
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+parameter | Description
+--- | ---
+**onTextRecognize(text):** | Event function called when a photo is taken and text get recognized . the text is passed as a parameter.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**Minimum ES6 example**
+```js
+import React from 'react';
+import CameraTesseract from 'tesseract-with-html5-camera/dist/lib/index.js';
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+function App (props) {
+  const handleTakePhoto = (text) => {
+    // Do stuff with recognized text...
+    console.log('Recognize text: ', text);
+  }
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+  return (
+    <>
+      <h3>Check result in console</h3>
+      <CameraTesseract
+        onTextRecognize = { (text) => { handleTakePhoto(text); } }
+      />
+    </>
+  );
+}
 
-## Learn More
+export default App;
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## API
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+### PropTypes
+Properties | Type | Default | Description
+--- | --- | --- | ---
+**onTextRecognize(text):** (Optional) | Event || The function called when a photo is taken. the text is passed as a parameter after recognizing the text.
+**showLogsOnConsole:** (optional) | Boolean | true | If true, Show text recognizing logs in console
+**isFullscreen:** (Optional) | Boolean | false | If true, Show full screen camera view
+**isImageMirror:** (Optional) | Boolean | true | If is true, the camera image will be mirror.
+**imageType:**: (Optional) | String | png | String used to get the desired image type between `jpg` or `png`. to specify the imageType use the constant IMAGE_TYPES, for example to specify jpg format use IMAGE_TYPES.JPG. Use `IMAGE_TYPES` constant to get the right image type Example:. IMAGE_TYPES.JPG or IMAGE_TYPES.PNG
+**onCameraError(error):** (Optional) | Event || Callback called with the error object as parameter when error occur while opening the camera. Often the permission.
+**onCameraStart():** (optional) | Event || Callback called when the camera is started.
+**onCameraStop():** (optional) | Event || Callback called when the camera is stopped.
